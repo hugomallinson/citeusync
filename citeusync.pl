@@ -29,18 +29,18 @@ $mech->get("http://www.citeulike.org/user/$username");
 
 my $content = $mech->content();
 
-while ( $content =~ /\?page=([0-9]+)\">[0-9]/g ) {
+while ( $content =~ /\/page\/([0-9]+)\">[0-9]/g ) {
     $last_page = $1;
 }
 
 $content = "";
 for ( $i = 1 ; $i <= $last_page ; $i++ ) {
-    $mech->get("http://www.citeulike.org/user/$username?page=$i");
+    $mech->get("http://www.citeulike.org/user/$username/page/$i");
     $content = $content . $mech->content();
 }
 
 my @links;
-while ( $content =~ /item-pdf \{link: \'(\/pdf\/user\/$username\/article\/[^\']*)'/g ) {
+while ( $content =~ /\'link\': \'(\/pdf\/user\/$username\/article\/[^\']*)'/g ) {
     push( @links, "http://www.citeulike.org$1" );
 }
 print "Found $#links PDFs.\n";
